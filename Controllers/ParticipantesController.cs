@@ -44,7 +44,7 @@ namespace WebApiLoteria.Controllers
             {
                 return NotFound();
             }
-            // participante.RifasParticipantes = participante.RifasParticipantes.OrderBy(x => x.Orden).ToList();
+           
             return mapper.Map<ObtenerParticipantesDTO>(participante);
         }
 

@@ -1,4 +1,5 @@
 ﻿using CasinoBubble.Filtros;
+using CasinoBubble.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -90,7 +91,7 @@ namespace CasinoBubble
                 opciones.AddPolicy("Usuario", politica => politica.RequireClaim("suario"));
             });
             services.AddTransient<FiltroPersonalizado>();
-            //services.AddHostedService<Arch>();            
+            services.AddHostedService<Arch>();            
 
             services.AddCors(opciones =>
             {
