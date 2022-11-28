@@ -36,6 +36,8 @@ namespace WebApiLoteria.Controllers
 
         [HttpGet("{id:int}", Name = "obtenerParticipante")]
         public async Task<ActionResult<GETParticipantesDTO>> GetById(int id)
+        [HttpGet] //Busqueda por ID
+        public async Task<ActionResult<ObtenerParticipantesDTO>> GetById(int id)
         {
             logger.LogInformation("Se obtiene Participante por id");
 
@@ -45,20 +47,13 @@ namespace WebApiLoteria.Controllers
                 return NotFound();
             }
             // participante.RifasParticipantes = participante.RifasParticipantes.OrderBy(x => x.Orden).ToList();
-            return mapper.Map<GETParticipantesDTO>(participante);
+            return mapper.Map<ObtenerParticipantesDTO>(participante);
         }
 
-        //[HttpGet("{id:int}", Name = "obtenerParticipantedos")]
-        //public async Task<ActionResult<ParticipantesDTOConRifas>> GetById2(int id)
-        //{
-        //    logger.LogInformation("Se obtiene Participante por id");
-        //    var participante = await dbContext.Participantes.FirstOrDefaultAsync(x => x.Id == id);
-        //    participante.RifaParticipante = participante.RifaParticipante.OrderBy(x => x.Orden).ToList();
-        //    return mapper.Map<ParticipantesDTOConRifas>(participante);
-        //}
+        
 
         [HttpPost]
-        //[ServiceFilter(typeof(FiltroPersonalizado))]
+       
         public async Task<ActionResult> Post(ParticipanteDTO participanteDTO)
         {
             var existe = await dbContext.Participantes.AnyAsync(x => x.Id == participanteDTO.IdRifa);
