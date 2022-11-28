@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CasinoBubble.DTOs
 {
-    public class ObtenerParticipantes
+    public class ObtenerParticipantesDTO
     {
         public int Id { get; set; }  //ID del participante
 
