@@ -24,7 +24,7 @@ namespace CasinoBubble.Utilidades
             CreateMap<CrearParticipanteDTO, Participante>();
             CreateMap<ParticipanteDTO, RifaLoteria>();
             CreateMap<ParticipanteDTO, Participante>();
-            CreateMap<Participante, GETParticipantesDTO>();
+            CreateMap<Participante, ObtenerParticipantesDTO>();
             CreateMap<RifaLoteria, ObtenerRifa>();
         }
     }

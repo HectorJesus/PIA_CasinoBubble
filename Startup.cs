@@ -1,5 +1,4 @@
 ﻿using CasinoBubble.Filtros;
-//using CasinoBubble.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -30,13 +29,30 @@ namespace CasinoBubble
             }).AddJsonOptions(x =>
             x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles).AddNewtonsoftJson();
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddDbContext<ApplicationDbContext>(options =>
                         options.UseSqlServer(Configuration.GetConnectionString("defaultConnetion")));
+
+            services.AddResponseCaching();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(opciones => opciones.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(Configuration["keyjwt"])),
+                    ClockSkew = TimeSpan.Zero
+                });
+
+
             services.AddEndpointsApiExplorer();
+            services.AddMvc();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CasinoBubble", Version = "v1.2" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CasinoBubble", Version = "v1" });
+
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -45,6 +61,7 @@ namespace CasinoBubble
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header
                 });
+
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -59,31 +76,21 @@ namespace CasinoBubble
                          new String[]{}
                     }
                 });
-
             });
+
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddAuthorization(opciones =>
             {
-                opciones.AddPolicy("Administrador", politica => politica.RequireClaim("Administrador"));
-                opciones.AddPolicy("Usuario", politica => politica.RequireClaim("Usuario"));
+                opciones.AddPolicy("Administrador", politica => politica.RequireClaim("administrador"));
+                opciones.AddPolicy("Usuario", politica => politica.RequireClaim("suario"));
             });
             services.AddTransient<FiltroPersonalizado>();
-            //services.AddHostedService<Arch>();
-            services.AddAutoMapper(typeof(Startup));
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(opciones => opciones.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(Configuration["keyjwt"])),
-                    ClockSkew = TimeSpan.Zero
-                });
+            //services.AddHostedService<Arch>();            
 
             services.AddCors(opciones =>
             {
@@ -93,7 +100,7 @@ namespace CasinoBubble
                 });
             });
         }
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {

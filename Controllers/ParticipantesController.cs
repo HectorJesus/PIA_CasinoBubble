@@ -34,9 +34,7 @@ namespace WebApiLoteria.Controllers
             return await dbContext.Participantes.ToListAsync();
         }
 
-        [HttpGet("{id:int}", Name = "obtenerParticipante")]
-        public async Task<ActionResult<GETParticipantesDTO>> GetById(int id)
-        [HttpGet] //Busqueda por ID
+        [HttpGet("{id:int}", Name = "Obtener Participante")] //Busqueda por ID
         public async Task<ActionResult<ObtenerParticipantesDTO>> GetById(int id)
         {
             logger.LogInformation("Se obtiene Participante por id");
@@ -67,12 +65,12 @@ namespace WebApiLoteria.Controllers
 
             dbContext.Add(participante);
             await dbContext.SaveChangesAsync();
-            var DTOparticipante = mapper.Map<GETParticipantesDTO>(participante);
+            var DTOparticipante = mapper.Map<ObtenerParticipantesDTO>(participante);
             return CreatedAtRoute("obtenerParticipante", new { id = participante.Id }, DTOparticipante);
 
 
         }
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "administrador")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Put(CrearParticipanteDTO crearParticipanteDTO, int id)
         {
@@ -87,7 +85,7 @@ namespace WebApiLoteria.Controllers
             await dbContext.SaveChangesAsync();
             return NoContent();
         }
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "administrador")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
@@ -100,7 +98,7 @@ namespace WebApiLoteria.Controllers
             await dbContext.SaveChangesAsync();
             return Ok();
         }
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "administrador")]
         [HttpPatch("{id:int}")]
         public async Task<ActionResult> Patch(int id, JsonPatchDocument<ParticipantePatchDTO> patchDocument)
         {
