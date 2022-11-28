@@ -1,23 +1,24 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using CasinoBubble.DTOs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using CasinoBubble.DTOs;
-using CasinoBubble.Entidades;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+using CasinoBubble.Entidades;
 
-namespace CasinoBubble.Controllers
+namespace WebApiLoteria.Controllers
 {
     [ApiController]
-    [Route("Cuentas")]
-    public class CuentasController
+    [Route("cuentas")]
+    public class CuentasController : ControllerBase
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly IConfiguration configuration;
         private readonly SignInManager<IdentityUser> signInManager;
+
         public CuentasController(UserManager<IdentityUser> userManager, IConfiguration configuration,
             SignInManager<IdentityUser> signInManager)
         {
@@ -25,17 +26,67 @@ namespace CasinoBubble.Controllers
             this.configuration = configuration;
             this.signInManager = signInManager;
         }
-        private async Task<AutenticacionResp> ConstruirToken(Usuario sistemaUsuario)
+
+        [HttpPost("registrar")]
+        public async Task<ActionResult<AutenticacionResp>> Registrar(Usuario usuario)
+        {
+            var user = new IdentityUser { UserName = usuario.Email, Email = usuario.Email };
+            var result = await userManager.CreateAsync(user, usuario.Password);
+
+            if (result.Succeeded)
+            {
+                return await ConstruirToken(usuario);
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<AutenticacionResp>> Login(Usuario usuario)
+        {
+            var result = await signInManager.PasswordSignInAsync(usuario.Email,
+                usuario.Password, isPersistent: false, lockoutOnFailure: false);
+
+            if (result.Succeeded)
+            {
+                return await ConstruirToken(usuario);
+            }
+            else
+            {
+                return BadRequest("Login Incorrecto");
+            }
+
+        }
+
+        [HttpGet("RenovarToken")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<AutenticacionResp>> Renovar()
+        {
+            var emailClaim = HttpContext.User.Claims.Where(claim => claim.Type == "email").FirstOrDefault();
+            var email = emailClaim.Value;
+
+            var credenciales = new Usuario()
+            {
+                Email = email
+            };
+
+            return await ConstruirToken(credenciales);
+
+        }
+
+        private async Task<AutenticacionResp> ConstruirToken(Usuario usuario)
         {
 
             var claims = new List<Claim>
             {
-                new Claim("email", sistemaUsuario.Email)
+                new Claim("email", usuario.Email)
 
             };
 
-            var usuario = await userManager.FindByEmailAsync(sistemaUsuario.Email);
-            var claimsDB = await userManager.GetClaimsAsync(usuario);
+            var user = await userManager.FindByEmailAsync(usuario.Email);
+            var claimsDB = await userManager.GetClaimsAsync(user);
 
             claims.AddRange(claimsDB);
 
@@ -54,58 +105,7 @@ namespace CasinoBubble.Controllers
             };
         }
 
-        [HttpPost("Registrar")]
-        public async Task<ActionResult<AutenticacionResp>> Registrar(Usuario sistema)
-        {
-            var user = new IdentityUser { UserName = sistema.Email, Email = sistema.Email };
-            var result = await userManager.CreateAsync(user, sistema.Password);
-
-            if (result.Succeeded)
-            {
-                return await ConstruirToken(sistema);
-            }
-            else
-            {
-                return BadRequest(result.Errors);
-            }
-        }
-
-        [HttpPost("Login")]
-        public async Task<ActionResult<AutenticacionResp>> Login(Usuario sistemaUsuario)
-        {
-            var result = await signInManager.PasswordSignInAsync(sistemaUsuario.Email,
-                sistemaUsuario.Password, isPersistent: false, lockoutOnFailure: false);
-
-            if (result.Succeeded)
-            {
-                return await ConstruirToken(sistemaUsuario);
-            }
-            else
-            {
-                return BadRequest("Login Incorrecto");
-            }
-
-        }
-
-        
-
-        [HttpPost("Reiniciar Contraseña")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<AutenticacionResp>> Renovar()
-        {
-            var emailClaim = HttpContext.User.Claims.Where(claim => claim.Type == "email").FirstOrDefault();
-            var email = emailClaim.Value;
-
-            var credenciales = new Usuario()
-            {
-                Email = email
-            };
-
-            return await ConstruirToken(credenciales);
-
-        }
-
-        [HttpPost("Crear Admin")]
+        [HttpPost("HacerAdmin")]
         public async Task<ActionResult> HacerAdmin(EditarAdministradorDTO editarAdminDTO)
         {
             var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Email);
@@ -115,7 +115,7 @@ namespace CasinoBubble.Controllers
             return NoContent();
         }
 
-        [HttpPost("Revocar Admin")]
+        [HttpPost("RemoverAdmin")]
         public async Task<ActionResult> RemoverAdmin(EditarAdministradorDTO editarAdminDTO)
         {
             var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Email);
@@ -124,5 +124,7 @@ namespace CasinoBubble.Controllers
 
             return NoContent();
         }
+
     }
 }
+

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CasinoBubble.DTOs
 {
-    public class CrearParticipanteTDO
+    public class CrearParticipanteDTO
     {
         [Required(ErrorMessage = "El campo {0} es necesario")]
         [StringLength(maximumLength: 10, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres")]

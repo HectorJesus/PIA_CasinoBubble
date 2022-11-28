@@ -9,4 +9,4 @@ namespace CasinoBubble.DTOs
         public string Email { get; set; }
     }
 }
-}
+

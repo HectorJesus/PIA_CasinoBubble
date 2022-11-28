@@ -1,5 +1,5 @@
 ﻿using CasinoBubble.Filtros;
-using CasinoBubble.Services;
+//using CasinoBubble.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +14,14 @@ namespace CasinoBubble
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             Configuration = configuration;
         }
+
+        public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers(opciones =>
@@ -69,7 +71,7 @@ namespace CasinoBubble
                 opciones.AddPolicy("Usuario", politica => politica.RequireClaim("Usuario"));
             });
             services.AddTransient<FiltroPersonalizado>();
-            services.AddHostedService<Arch>();
+            //services.AddHostedService<Arch>();
             services.AddAutoMapper(typeof(Startup));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opciones => opciones.TokenValidationParameters = new TokenValidationParameters
@@ -89,6 +91,25 @@ namespace CasinoBubble
                 {
                     builder.WithOrigins("https://apirequest.io").AllowAnyMethod().AllowAnyHeader();
                 });
+            });
+        }
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
             });
         }
 
