@@ -22,5 +22,7 @@ namespace CasinoBubble
         public DbSet<Participante> Participantes { get; set; }
 
         public DbSet<ParticipanteRifa> ParticipanteRifa { get; set; }
+
+        public DbSet<Premios> Premios { get; set; }
     }
 }

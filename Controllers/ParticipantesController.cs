@@ -26,9 +26,10 @@ namespace CasinoBubble.Controllers
             this.logger = logger;
             this.mapper = mapper;
         }
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
-        [HttpGet ("Obtener participantes")]
-        [ServiceFilter(typeof(FiltroPersonalizado))]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
+        [HttpGet("Obtener participantes")]
+        //[ServiceFilter(typeof(FiltroPersonalizado))]
+        [AllowAnonymous]
         public async Task<ActionResult<List<Participante>>> GetAll()
         {
             logger.LogInformation("Se obtiene el listado de Participantes");
@@ -45,34 +46,34 @@ namespace CasinoBubble.Controllers
             {
                 return NotFound();
             }
-           
+
             return mapper.Map<ObtenerParticipantesDTO>(participante);
         }
 
-        [HttpPost ("Crear Participante")]
+        [HttpPost("Crear Participante")]
         [AllowAnonymous]
-        public async Task<ActionResult> Post(ParticipanteDTO participanteDTO)
+        public async Task<ActionResult> Post(CrearParticipanteDTO crearParticipanteDTO)
         {
-            var existe = await dbContext.Participantes.AnyAsync(x => x.Id == participanteDTO.IdRifa);
+            var existe = await dbContext.Participantes.AnyAsync(x => x.Nombre == crearParticipanteDTO.Nombre);
 
             if (existe)
             {
-                return BadRequest($"Ya existe esa rifa con el id {participanteDTO.IdRifa}");
+                return BadRequest($"El participante ya existe" + $"{crearParticipanteDTO.Nombre}");
             }
 
-            var participante = mapper.Map<Participante>(participanteDTO);
+            var participante = mapper.Map<Participante>(crearParticipanteDTO);
 
             dbContext.Add(participante);
             await dbContext.SaveChangesAsync();
             var DTOparticipante = mapper.Map<ObtenerParticipantesDTO>(participante);
             return CreatedAtRoute("obtenerParticipante", new { id = participante.Id }, DTOparticipante);
 
-
         }
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
         [HttpPut("{id:int} Reemplazar Participante")]
+        [AllowAnonymous]
 
-        public async Task<ActionResult> Put(CrearParticipanteDTO crearParticipanteDTO, int id)
+        public async Task<ActionResult> Put(ParticipanteDTO participanteDTO, int id)
         {
             var existe = await dbContext.Participantes.AnyAsync(x => x.Id == id);
             if (!existe)
@@ -80,7 +81,9 @@ namespace CasinoBubble.Controllers
                 return NotFound("El usuario no existe");
             }
 
-            var participante = mapper.Map<Participante>(crearParticipanteDTO);
+            var participante = mapper.Map<Participante>(participanteDTO);
+            participante.Id = id;
+
             dbContext.Update(participante);
             await dbContext.SaveChangesAsync();
             return NoContent();

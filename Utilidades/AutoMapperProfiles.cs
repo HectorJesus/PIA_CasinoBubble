@@ -10,14 +10,7 @@ namespace CasinoBubble.Utilidades
         {
             CreateMap<RifaCreacionDTO, RifaLoteria>();
             CreateMap<RifaLoteria, RifaDTO>();
-            //CreateMap<Rifa, RifaDTOConParticipantes>()
-            //    .ForMember(rifaDTO => rifaDTO.Participantes, opciones => opciones.MapFrom(MapRifaDTOParticipante));
-            //CreateMap<CrearParticipanteDTO, Participante>()
-            //    .ForMember(participante => participante.RifasParticipantes, opciones => opciones.MapFrom(MapRifaParticipante));
-
             CreateMap<Participante, ParticipanteDTO>();
-            //CreateMap<Participante, ParticipantesDTOConRifas>()
-            //    .ForMember(participanteDTO => participanteDTO.Rifas, opciones => opciones.MapFrom(MapParticipanteDTORifas));
             CreateMap<ParticipantePatchDTO, Participante>().ReverseMap();
 
             CreateMap<CrearParticipanteDTO, RifaLoteria>();
@@ -26,6 +19,10 @@ namespace CasinoBubble.Utilidades
             CreateMap<ParticipanteDTO, Participante>();
             CreateMap<Participante, ObtenerParticipantesDTO>();
             CreateMap<RifaLoteria, ObtenerRifa>();
+
+            CreateMap<PremioDTO, Premios>();
+            CreateMap<Premios, ObtenerPremioDTO>();
+
         }
     }
 }
