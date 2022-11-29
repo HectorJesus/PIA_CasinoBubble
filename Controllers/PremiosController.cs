@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace CasinoBubble.Controllers
 {
     [ApiController]
-    [Route("premiossss")]
+    [Route("premiosssszzz")]
     [AllowAnonymous]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
     public class PremiosController : ControllerBase
