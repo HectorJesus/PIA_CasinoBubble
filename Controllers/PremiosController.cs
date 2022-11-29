@@ -26,9 +26,9 @@ namespace CasinoBubble.Controllers
         }
 
         [HttpGet("{id:int} obtenerPremio")]
-        public async Task<ActionResult<List<ObtenerPremioDTO>>> GetById(int id)
+        public async Task<ActionResult<List<ObtenerPremioDTO>>> GetById(int idRifa)
         {
-            var premio = await dbContext.Premios.Where(premioDB => premioDB.IdRifa == id).ToListAsync();
+            var premio = await dbContext.Premios.Where(premioDB => premioDB.IdRifa == idRifa).ToListAsync();
 
             if (premio == null)
             {
@@ -38,10 +38,10 @@ namespace CasinoBubble.Controllers
             return mapper.Map<List<ObtenerPremioDTO>>(premio);
         }
         [HttpPost("postearPremio")]
-        public async Task<ActionResult> Post(int rifaId, PremioDTO premioDtO)
+        public async Task<ActionResult> Post(int idRifa, PremioDTO premioDtO)
         {
 
-            var existeRifa = await dbContext.Rifas.AnyAsync(vetDB => vetDB.Id == rifaId);
+            var existeRifa = await dbContext.Rifas.AnyAsync(premioDB => premioDB.Id == idRifa);
             if (!existeRifa)
             {
                 return NotFound();
@@ -49,20 +49,20 @@ namespace CasinoBubble.Controllers
 
             var premio = mapper.Map<Premios>(premioDtO);
 
-            premio.IdRifa = rifaId;
+            premio.IdRifa = idRifa;
             dbContext.Add(premio);
             await dbContext.SaveChangesAsync();
 
             var premioDTO = mapper.Map<ObtenerPremioDTO>(premio);
 
-            //return CreatedAtRoute("obtenerPremio", new { id = premio.Id, rifaId = rifaId }, premioDTO);
+           
             return Ok();
         }
 
         [HttpPut("{id:int} modificsrPremio")]
-        public async Task<ActionResult> Put(int rifaId, int id, PremioDTO premioCreacionDTO)
+        public async Task<ActionResult> Put(int idRifa, int id, PremioDTO premioDtO)
         {
-            var existeRifa = await dbContext.Rifas.AnyAsync(vetDB => vetDB.Id == rifaId);
+            var existeRifa = await dbContext.Rifas.AnyAsync(premioDB => premioDB.Id == idRifa);
             if (!existeRifa)
             {
                 return NotFound();
@@ -73,9 +73,10 @@ namespace CasinoBubble.Controllers
             {
                 return NotFound();
             }
-            var premio = mapper.Map<Premios>(premioCreacionDTO);
+            var premio = mapper.Map<Premios>(premioDtO);
             premio.Id = id;
-            premio.IdRifa = rifaId;
+
+            premio.IdRifa = idRifa;
             dbContext.Update(premio);
             await dbContext.SaveChangesAsync();
             return NoContent();
