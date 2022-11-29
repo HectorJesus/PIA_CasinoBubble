@@ -12,7 +12,7 @@ using CasinoBubble.Entidades;
 namespace CasinoBubble.Controllers
 {
     [ApiController]
-    [Route("cuentas")]
+    [Route("Cuentas")]
     public class CuentasController : ControllerBase
     {
         private readonly UserManager<IdentityUser> userManager;
@@ -27,7 +27,7 @@ namespace CasinoBubble.Controllers
             this.signInManager = signInManager;
         }
 
-        [HttpPost("registrar")]
+        [HttpPost("Registrar")]
         public async Task<ActionResult<AutenticacionResp>> Registrar(Usuario usuario)
         {
             var user = new IdentityUser { UserName = usuario.Email, Email = usuario.Email };
@@ -43,7 +43,7 @@ namespace CasinoBubble.Controllers
             }
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<ActionResult<AutenticacionResp>> Login(Usuario usuario)
         {
             var result = await signInManager.PasswordSignInAsync(usuario.Email,

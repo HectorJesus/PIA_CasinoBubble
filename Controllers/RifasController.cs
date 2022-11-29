@@ -28,7 +28,7 @@ namespace CasinoBubble.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("Obtener Listado de Rifas")]
         [ServiceFilter(typeof(FiltroPersonalizado))]
         public async Task<List<RifaDTO>> Get()
         {
@@ -37,7 +37,7 @@ namespace CasinoBubble.Controllers
             return mapper.Map<List<RifaDTO>>(rifas);
         }
 
-        [HttpGet("{id:int}", Name = "obtenerRifa")]
+        [HttpGet("{id:int} Obtener Rifa")]
         public async Task<ActionResult<ObtenerRifa>> Get(int id)
         {
             var rifa = await dbContext.Rifas.FirstOrDefaultAsync(rifaBD => rifaBD.Id == id);
@@ -49,7 +49,7 @@ namespace CasinoBubble.Controllers
             return mapper.Map<ObtenerRifa>(rifa);
         }
 
-        [HttpPost]
+        [HttpPost("Crear Rifa")]
         
         public async Task<ActionResult> Post([FromBody] RifaCreacionDTO crearRifaDTO)
         {
@@ -68,7 +68,7 @@ namespace CasinoBubble.Controllers
             return CreatedAtRoute("obtenerRifa", new { id = rifa.Id }, rifaDT0);
         }
 
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:int} Modificar Rifa")]
         public async Task<ActionResult> Put(RifaCreacionDTO rifaCreacionDTO, int id)
         {
             var existe = await dbContext.Rifas.AnyAsync(x => x.Id == id);
@@ -83,7 +83,7 @@ namespace CasinoBubble.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id:int} Eliminar Rifa")]
         public async Task<ActionResult> Delete(int id)
         {
             var exist = await dbContext.Rifas.AnyAsync(x => x.Id == id);

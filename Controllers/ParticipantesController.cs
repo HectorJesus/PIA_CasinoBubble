@@ -27,7 +27,7 @@ namespace CasinoBubble.Controllers
             this.mapper = mapper;
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
-        [HttpGet]
+        [HttpGet ("Obtener participantes")]
         [ServiceFilter(typeof(FiltroPersonalizado))]
         public async Task<ActionResult<List<Participante>>> GetAll()
         {
@@ -35,6 +35,7 @@ namespace CasinoBubble.Controllers
             return await dbContext.Participantes.ToListAsync();
         }
 
+        [HttpGet("Obtener Participantes")]
         [HttpGet("{id:int}", Name = "Obtener Participante")] //Busqueda por ID
         public async Task<ActionResult<ObtenerParticipantesDTO>> GetById(int id)
         {
@@ -51,7 +52,6 @@ namespace CasinoBubble.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-
         public async Task<ActionResult> Post(ParticipanteDTO participanteDTO)
         {
             var existe = await dbContext.Participantes.AnyAsync(x => x.Id == participanteDTO.IdRifa);
@@ -71,13 +71,14 @@ namespace CasinoBubble.Controllers
 
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:int} Crear Participante")]
+
         public async Task<ActionResult> Put(CrearParticipanteDTO crearParticipanteDTO, int id)
         {
             var existe = await dbContext.Participantes.AnyAsync(x => x.Id == id);
             if (!existe)
             {
-                return NotFound("El participante no existe");
+                return NotFound("El usuario no existe");
             }
 
             var participante = mapper.Map<Participante>(crearParticipanteDTO);
@@ -86,7 +87,8 @@ namespace CasinoBubble.Controllers
             return NoContent();
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id:int} Eliminar Participante")]
+        
         public async Task<ActionResult> Delete(int id)
         {
             var existe = await dbContext.Participantes.AnyAsync(x => x.Id == id);
@@ -99,7 +101,8 @@ namespace CasinoBubble.Controllers
             return Ok();
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
-        [HttpPatch("{id:int}")]
+        [HttpPatch("{id:int} Editar Participante")]
+
         public async Task<ActionResult> Patch(int id, JsonPatchDocument<ParticipantePatchDTO> patchDocument)
         {
             if (patchDocument == null)
