@@ -6,19 +6,24 @@ namespace CasinoBubble.DTOs
     public class CrearParticipanteDTO
     {
         [Required(ErrorMessage = "El campo {0} es necesario")]
-        [StringLength(maximumLength: 10, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres")]
+        [StringLength(maximumLength: 15, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres")]
         [PrimeraLetraMayuscula]
-        public string Nombre { get; set; }  //Nombre del participante
+        public string Nombre { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es necesario")]
-        [StringLength(maximumLength: 10, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres")]
+        [StringLength(maximumLength: 15, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres")]
         [PrimeraLetraMayuscula]
-        public string Apellido { get; set; }  //Apellido del participante
+        public string ApellidoP { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es necesario")]
-        public DateTime FechaInscripcion { get; set; }  //Fecha de inscripcion (Toma la fecha actual de tu sistema)
+        [StringLength(maximumLength: 15, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres")]
+        [PrimeraLetraMayuscula]
+        public string ApellidoM { get; set; }
+
+        public DateTime FechaInscripcion { get; set; }
 
         public int IdRifa { get; set; }
+
 
     }
 }

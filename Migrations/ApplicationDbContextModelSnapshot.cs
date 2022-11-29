@@ -30,18 +30,26 @@ namespace CasinoBubble.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Apellido")
+                    b.Property<string>("ApellidoM")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
-                    b.Property<DateTime>("FechaInscripcion")
+                    b.Property<string>("ApellidoP")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<DateTime?>("FechaInscripcion")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("IdRifa")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("Id");
 
@@ -68,7 +76,7 @@ namespace CasinoBubble.Migrations
 
                     b.HasIndex("RifaLoteriaId");
 
-                    b.ToTable("RifasParticipantes");
+                    b.ToTable("ParticipanteRifa");
                 });
 
             modelBuilder.Entity("CasinoBubble.Entidades.RifaLoteria", b =>
@@ -290,13 +298,13 @@ namespace CasinoBubble.Migrations
             modelBuilder.Entity("CasinoBubble.Entidades.ParticipanteRifa", b =>
                 {
                     b.HasOne("CasinoBubble.Entidades.Participante", "Participante")
-                        .WithMany("ParticipantesRifa")
+                        .WithMany("ParticipanteRifa")
                         .HasForeignKey("ParticipanteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CasinoBubble.Entidades.RifaLoteria", "RifaLoteria")
-                        .WithMany("ParticipantesRifa")
+                        .WithMany("ParticipanteRifa")
                         .HasForeignKey("RifaLoteriaId");
 
                     b.Navigation("Participante");
@@ -357,12 +365,12 @@ namespace CasinoBubble.Migrations
 
             modelBuilder.Entity("CasinoBubble.Entidades.Participante", b =>
                 {
-                    b.Navigation("ParticipantesRifa");
+                    b.Navigation("ParticipanteRifa");
                 });
 
             modelBuilder.Entity("CasinoBubble.Entidades.RifaLoteria", b =>
                 {
-                    b.Navigation("ParticipantesRifa");
+                    b.Navigation("ParticipanteRifa");
                 });
 #pragma warning restore 612, 618
         }

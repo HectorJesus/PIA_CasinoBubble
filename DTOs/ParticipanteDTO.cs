@@ -21,8 +21,6 @@ namespace CasinoBubble.DTOs
         public string ApellidoM { get; set; }
 
         public int IdRifa { get; set; }
-
-
         public DateTime FechaInscripcion { get; set; }
     }
 }

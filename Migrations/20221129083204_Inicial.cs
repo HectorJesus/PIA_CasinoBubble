@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CasinoBubble.Migrations
 {
-    public partial class Inicial2 : Migration
+    public partial class Inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -46,6 +46,36 @@ namespace CasinoBubble.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Participantes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    ApellidoP = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    ApellidoM = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    FechaInscripcion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IdRifa = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Participantes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rifas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NombreRifa = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rifas", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -154,6 +184,31 @@ namespace CasinoBubble.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ParticipanteRifa",
+                columns: table => new
+                {
+                    RifaId = table.Column<int>(type: "int", nullable: false),
+                    ParticipanteId = table.Column<int>(type: "int", nullable: false),
+                    Orden = table.Column<int>(type: "int", nullable: false),
+                    RifaLoteriaId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ParticipanteRifa", x => new { x.RifaId, x.ParticipanteId });
+                    table.ForeignKey(
+                        name: "FK_ParticipanteRifa_Participantes_ParticipanteId",
+                        column: x => x.ParticipanteId,
+                        principalTable: "Participantes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ParticipanteRifa_Rifas_RifaLoteriaId",
+                        column: x => x.RifaLoteriaId,
+                        principalTable: "Rifas",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -192,6 +247,16 @@ namespace CasinoBubble.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ParticipanteRifa_ParticipanteId",
+                table: "ParticipanteRifa",
+                column: "ParticipanteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ParticipanteRifa_RifaLoteriaId",
+                table: "ParticipanteRifa",
+                column: "RifaLoteriaId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -212,10 +277,19 @@ namespace CasinoBubble.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ParticipanteRifa");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Participantes");
+
+            migrationBuilder.DropTable(
+                name: "Rifas");
         }
     }
 }

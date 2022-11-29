@@ -1,4 +1,6 @@
-﻿namespace CasinoBubble.Entidades
+﻿using CasinoBubble.Entidades;
+
+namespace CasinoBubble.Entidades
 {
     public class ParticipanteRifa
     {

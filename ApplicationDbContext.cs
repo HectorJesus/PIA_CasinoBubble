@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace CasinoBubble
 {
     public class ApplicationDbContext : IdentityDbContext
@@ -20,6 +21,6 @@ namespace CasinoBubble
         public DbSet<RifaLoteria> Rifas { get; set; }
         public DbSet<Participante> Participantes { get; set; }
 
-        public DbSet<ParticipanteRifa> RifasParticipantes { get; set; }
+        public DbSet<ParticipanteRifa> ParticipanteRifa { get; set; }
     }
 }

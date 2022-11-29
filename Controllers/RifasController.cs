@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using CasinoBubble.Entidades;
 
 
-namespace WebApiLoteria.Controllers
+namespace CasinoBubble.Controllers
 {
     [ApiController]
     [Route("api/rifas")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Administrador")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
     public class RifasController : ControllerBase
     {
 
@@ -50,6 +50,7 @@ namespace WebApiLoteria.Controllers
         }
 
         [HttpPost]
+        
         public async Task<ActionResult> Post([FromBody] RifaCreacionDTO crearRifaDTO)
         {
             var existeRifa = await dbContext.Rifas.AnyAsync(x => x.NombreRifa == crearRifaDTO.NombreRifa);

@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using CasinoBubble.Entidades;
 
-namespace WebApiLoteria.Controllers
+namespace CasinoBubble.Controllers
 {
     [ApiController]
     [Route("cuentas")]
@@ -110,7 +110,7 @@ namespace WebApiLoteria.Controllers
         {
             var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Email);
 
-            await userManager.AddClaimAsync(usuario, new Claim("EsAdmin", "1"));
+            await userManager.AddClaimAsync(usuario, new Claim("EsAdministrador", "1"));
 
             return NoContent();
         }
@@ -120,7 +120,7 @@ namespace WebApiLoteria.Controllers
         {
             var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Email);
 
-            await userManager.RemoveClaimAsync(usuario, new Claim("EsAdmin", "1"));
+            await userManager.RemoveClaimAsync(usuario, new Claim("EsAdminastrador", "1"));
 
             return NoContent();
         }

@@ -87,8 +87,8 @@ namespace CasinoBubble
 
             services.AddAuthorization(opciones =>
             {
-                opciones.AddPolicy("Administrador", politica => politica.RequireClaim("administrador"));
-                opciones.AddPolicy("Usuario", politica => politica.RequireClaim("suario"));
+                opciones.AddPolicy("EsAdministrador", politica => politica.RequireClaim("esAdministrador"));
+                opciones.AddPolicy("EsUsuario", politica => politica.RequireClaim("esUsuario"));
             });
             services.AddTransient<FiltroPersonalizado>();
             services.AddHostedService<Arch>();            
