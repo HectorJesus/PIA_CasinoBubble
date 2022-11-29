@@ -15,17 +15,17 @@ namespace CasinoBubble.Controllers
         {
 
 
-
+            /*
             [HttpGet("Obtener Ganadores Rifa")]
             [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
-            public async Task<ActionResult<ObtenerParticipantesDTO >>
+            public async obtenerParticipante
             {
 
 
                 try
                 {
-                    var numUsuarios = SELECT COUNT(*) ParticipanteRifa FROM CasinoBubble
+                    var numUsuarios = SELECT COUNT(*) ParticipanteRifa FROM CasinoBubble;
 
                 }
                 if (numUsuarios == 0)
@@ -34,6 +34,7 @@ namespace CasinoBubble.Controllers
                 }
 
             }
+            */
         }
     }
 }

@@ -35,8 +35,7 @@ namespace CasinoBubble.Controllers
             return await dbContext.Participantes.ToListAsync();
         }
 
-        [HttpGet("Obtener Participantes")]
-        [HttpGet("{id:int}", Name = "Obtener Participante")] //Busqueda por ID
+        [HttpGet("{id:int} Obtener Participantes")] //Busqueda por ID
         public async Task<ActionResult<ObtenerParticipantesDTO>> GetById(int id)
         {
             logger.LogInformation("Se obtiene Participante por id");
@@ -50,7 +49,7 @@ namespace CasinoBubble.Controllers
             return mapper.Map<ObtenerParticipantesDTO>(participante);
         }
 
-        [HttpPost]
+        [HttpPost ("Crear Participante")]
         [AllowAnonymous]
         public async Task<ActionResult> Post(ParticipanteDTO participanteDTO)
         {
@@ -71,7 +70,7 @@ namespace CasinoBubble.Controllers
 
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
-        [HttpPut("{id:int} Crear Participante")]
+        [HttpPut("{id:int} Reemplazar Participante")]
 
         public async Task<ActionResult> Put(CrearParticipanteDTO crearParticipanteDTO, int id)
         {
