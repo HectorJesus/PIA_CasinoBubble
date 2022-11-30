@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CasinoBubble.DTOs;
 using CasinoBubble.Filtros;
-using CasinoBubble;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +13,7 @@ namespace CasinoBubble.Controllers
     [ApiController]
     [Route("api/rifas")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
+    //[AllowAnonymous]
     public class RifasController : ControllerBase
     {
 
@@ -65,7 +65,7 @@ namespace CasinoBubble.Controllers
             await dbContext.SaveChangesAsync();
 
             var rifaDT0 = mapper.Map<RifaDTO>(rifa);
-            return CreatedAtRoute("obtenerRifa", new { id = rifa.Id }, rifaDT0);
+            return NoContent();
         }
 
         [HttpPut("{id:int} Modificar Rifa")]

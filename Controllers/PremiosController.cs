@@ -5,14 +5,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace CasinoBubble.Controllers
 {
     [ApiController]
     [Route("premiosssszzz")]
     [AllowAnonymous]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
     public class PremiosController : ControllerBase
     {
         private readonly ApplicationDbContext dbContext;
@@ -26,9 +25,9 @@ namespace CasinoBubble.Controllers
         }
 
         [HttpGet("{id:int} obtenerPremio")]
-        public async Task<ActionResult<List<ObtenerPremioDTO>>> GetById(int idRifa)
+        public async Task<ActionResult<List<ObtenerPremioDTO>>> GetById(int id)
         {
-            var premio = await dbContext.Premios.Where(premioDB => premioDB.IdRifa == idRifa).ToListAsync();
+            var premio = await dbContext.Premios.Where(premioDB => premioDB.Id == id).ToListAsync();
 
             if (premio == null)
             {

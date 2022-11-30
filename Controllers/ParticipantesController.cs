@@ -2,7 +2,6 @@
 using CasinoBubble.DTOs;
 using CasinoBubble.Entidades;
 using CasinoBubble.Filtros;
-using CasinoBubble;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
@@ -26,10 +25,10 @@ namespace CasinoBubble.Controllers
             this.logger = logger;
             this.mapper = mapper;
         }
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
         [HttpGet("Obtener participantes")]
-        //[ServiceFilter(typeof(FiltroPersonalizado))]
-        [AllowAnonymous]
+        [ServiceFilter(typeof(FiltroPersonalizado))]
+        //[AllowAnonymous]
         public async Task<ActionResult<List<Participante>>> GetAll()
         {
             logger.LogInformation("Se obtiene el listado de Participantes");
@@ -51,7 +50,7 @@ namespace CasinoBubble.Controllers
         }
 
         [HttpPost("Crear Participante")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<ActionResult> Post(CrearParticipanteDTO crearParticipanteDTO)
         {
             var existe = await dbContext.Participantes.AnyAsync(x => x.Nombre == crearParticipanteDTO.Nombre);
@@ -66,12 +65,12 @@ namespace CasinoBubble.Controllers
             dbContext.Add(participante);
             await dbContext.SaveChangesAsync();
             var DTOparticipante = mapper.Map<ObtenerParticipantesDTO>(participante);
-            return CreatedAtRoute("obtenerParticipante", new { id = participante.Id }, DTOparticipante);
+            return NoContent();
 
         }
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
         [HttpPut("{id:int} Reemplazar Participante")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
 
         public async Task<ActionResult> Put(ParticipanteDTO participanteDTO, int id)
         {
@@ -102,8 +101,11 @@ namespace CasinoBubble.Controllers
             await dbContext.SaveChangesAsync();
             return Ok();
         }
+
+
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
         [HttpPatch("{id:int} Editar Participante")]
+        //[AllowAnonymous]
 
         public async Task<ActionResult> Patch(int id, JsonPatchDocument<ParticipantePatchDTO> patchDocument)
         {
