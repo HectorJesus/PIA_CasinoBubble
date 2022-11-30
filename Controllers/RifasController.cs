@@ -29,7 +29,7 @@ namespace CasinoBubble.Controllers
         }
 
         [HttpGet("Obtener Listado de Rifas")]
-        [ServiceFilter(typeof(FiltroPersonalizado))]
+        [ServiceFilter(typeof(FiltroDeExcepcion))]
         public async Task<List<RifaDTO>> Get()
         {
             logger.LogInformation("Se obtiene el listado de rifas");
