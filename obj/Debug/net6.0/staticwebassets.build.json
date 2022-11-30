@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "Hash": "cyiDLBJh1BFWxiCsbZCvmqNjZPfA3Ev9q+I1vEjpaGE=",
+  "Source": "CasinoBubble",
+  "BasePath": "_content/CasinoBubble",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "CasinoBubble\\wwwroot",
+      "Source": "CasinoBubble",
+      "ContentRoot": "C:\\Users\\hecto\\Desktop\\PIA_BackEnd\\CasinoBubble\\CasinoBubble\\wwwroot\\",
+      "BasePath": "_content/CasinoBubble",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\hecto\\Desktop\\PIA_BackEnd\\CasinoBubble\\CasinoBubble\\wwwroot\\Arch",
+      "SourceId": "CasinoBubble",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\hecto\\Desktop\\PIA_BackEnd\\CasinoBubble\\CasinoBubble\\wwwroot\\",
+      "BasePath": "_content/CasinoBubble",
+      "RelativePath": "Arch",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Arch"
+    }
+  ]
+}

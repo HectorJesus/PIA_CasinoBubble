@@ -28,7 +28,6 @@ namespace CasinoBubble.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdministrador")]
         [HttpGet("Obtener participantes")]
         [ServiceFilter(typeof(FiltroPersonalizado))]
-        //[AllowAnonymous]
         public async Task<ActionResult<List<Participante>>> GetAll()
         {
             logger.LogInformation("Se obtiene el listado de Participantes");
